@@ -53,10 +53,12 @@ create the `.env` file in same `docker-compose.yml` directory
 version: '3.8'
 
 services:
-  app:
+  example_app:
     image: streaminnovation/example-go-rest-api:latest
     container_name: example-go-rest-api
     restart: always
+    ports:
+      - "3000:3000"
     env_file:
       - .env
 ```
