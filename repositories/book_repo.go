@@ -16,6 +16,11 @@ func NewBookRepository(dbConn *sql.DB) IBookRepository {
 	return bookRepository{db: dbConn}
 }
 
+func (r bookRepository) GetBooks() ([]models.Book, error) {
+	
+	return []models.Book{}, nil
+}
+
 // CreateBook creates a new book
 func (r bookRepository) CreateBook(book *models.Book) (*models.Book, error) {
 	// Raw SQL query
@@ -24,8 +29,22 @@ func (r bookRepository) CreateBook(book *models.Book) (*models.Book, error) {
 						VALUES ($1, $2, $3) 
 						RETURNING ID;`
 
+	// Begin transaction
+	tx, err := r.db.Begin()
+	// Check error
+	if err != nil {
+		return nil, err
+	}
+
+	// Prepare query
+	prepare, err := tx.Prepare(query)
+	// Check error
+	if err != nil {
+		return nil, err
+	}
+
 	// Execute the query and get the last inserted ID
-	err := r.db.QueryRow(
+	err = tx.Stmt(prepare).QueryRow(
 		query,
 		book.Title,
 		book.Author,
@@ -34,8 +53,13 @@ func (r bookRepository) CreateBook(book *models.Book) (*models.Book, error) {
 
 	// Check if there is an error
 	if err != nil {
+		// Rollback the transaction
+		tx.Rollback()
 		return nil, err
 	}
+
+	// Commit the transaction
+	tx.Commit()
 
 	// Return the new book
 	return book, nil
