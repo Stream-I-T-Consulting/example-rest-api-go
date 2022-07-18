@@ -12,8 +12,8 @@ type (
 		bookRepo repositories.IBookRepository
 	}
 	Handler interface {
-		// GetBooks(c *fiber.Ctx) error
-		// GetBookByID(c *fiber.Ctx) error
+		GetBooks(c *fiber.Ctx) error
+		GetBookByID(c *fiber.Ctx) error
 		CreateBook(c *fiber.Ctx) error
 		// UpdateBook(c *fiber.Ctx) error
 		// DeleteBook(c *fiber.Ctx) error

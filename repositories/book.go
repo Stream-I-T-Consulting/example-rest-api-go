@@ -6,8 +6,8 @@ import (
 
 type (
 	IBookRepository interface {
-		// GetBooks() ([]models.Book, error)
-		// GetBookByID(id int) (*models.Book, error)
+		GetBooks() ([]models.Book, error)
+		GetBookByID(id int) (*models.Book, error)
 		CreateBook(book *models.Book) (*models.Book, error)
 		// UpdateBook(book *models.Book) (*models.Book, error)
 		// DeleteBook(id int) error

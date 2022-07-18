@@ -18,5 +18,7 @@ func HTTPRootRoute(app *fiber.App) {
 func HTTPBookRoutes(app *fiber.App, dbConn *sql.DB) {
 	handler := handlers.NewHandler(dbConn)
 
+	app.Get("/books", handler.GetBooks)
+	app.Put("/books/:id", handler.GetBookByID)
 	app.Post("/books", handler.CreateBook)
 }

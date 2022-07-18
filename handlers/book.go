@@ -1,10 +1,39 @@
 package handlers
 
 import (
+	"strconv"
 	"stream-it-consulting/innovation-team/example-rest-api/models"
 
 	"github.com/gofiber/fiber/v2"
 )
+
+func (h handler) GetBooks(c *fiber.Ctx) error {
+	// Get the books
+	books, err := h.bookRepo.GetBooks()
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(books)
+}
+
+func (h handler) GetBookByID(c *fiber.Ctx) error {
+	// Get the book ID
+	id, err := strconv.Atoi(c.Params("id"))
+	if id == 0 || err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid book ID",
+		})
+	}
+
+	// Get the book
+	book, err := h.bookRepo.GetBookByID(id)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(book)
+}
 
 func (h handler) CreateBook(c *fiber.Ctx) error {
 	// Create the book struct
